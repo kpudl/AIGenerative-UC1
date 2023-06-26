@@ -6,14 +6,6 @@ namespace UseCase1_Tests
 {
     public class CountriesServiceTests: BaseTest
     {
-        private CountriesService _service;
-
-        [SetUp]
-        public void Setup()
-        {
-            _service = new CountriesService();
-        }
-
         [Test]
         public void CheckFilterCountryName()
         {
@@ -46,6 +38,8 @@ namespace UseCase1_Tests
 
             result = _service.FilterCountryWithPopulationLess(_testCountries, 50);
             Assert.AreEqual(result.Count(), 4);
+
+            Assert.Throws<ArgumentException>(() => _service.FilterCountryWithPopulationLess(_testCountries, -10));
         }
 
         [Test]
@@ -78,6 +72,8 @@ namespace UseCase1_Tests
 
             result = _service.SelectCountries(_testCountries, 200);
             Assert.AreEqual(result.Count(), _testCountries.Count());
+
+            Assert.Throws<ArgumentException>(() => _service.SelectCountries(_testCountries, -10));
         }
     }
 }

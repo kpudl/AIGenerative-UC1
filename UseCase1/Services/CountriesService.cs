@@ -15,7 +15,7 @@ namespace UseCase1.Services
             return inputList.Where(x => x.Name.Common.Contains(countryName, StringComparison.OrdinalIgnoreCase));
         }
 
-        public IEnumerable<RestCountryDto> FilterCountryWithPopulationLess(IEnumerable<RestCountryDto> inputList, uint populationInMil)
+        public IEnumerable<RestCountryDto> FilterCountryWithPopulationLess(IEnumerable<RestCountryDto> inputList, int populationInMil)
         {
             if (populationInMil < 0)
                 throw new ArgumentException("Filter parameter cannot be less then 0");

@@ -10,13 +10,25 @@ namespace UseCase1_Tests
         [Test]
         public void CheckEndpointTest()
         {
-            var restCountriesController = new RestCountriesController(_testCountries);
+            var restCountriesController = new RestCountriesController(_testCountries, _service);
             var result = (OkObjectResult)restCountriesController.Get();
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, 200);
 
             var resultValue = JsonConvert.DeserializeObject<IEnumerable<RestCountryDto>>(result.Value.ToString());
             Assert.AreEqual(resultValue.Count(), _testCountries.Count());
+        }
+
+        [Test]
+        public void CheckEndpointTestWithFilters()
+        {
+            var restCountriesController = new RestCountriesController(_testCountries, _service);
+            var result = (OkObjectResult)restCountriesController.Get(country:"SP");
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.StatusCode, 200);
+
+            var resultValue = JsonConvert.DeserializeObject<IEnumerable<RestCountryDto>>(result.Value.ToString());
+            Assert.AreEqual(resultValue.Count(), 1);
         }
     }
 }

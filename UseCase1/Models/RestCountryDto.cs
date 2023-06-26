@@ -60,7 +60,7 @@ namespace UseCase1.Models
 
         public MapsDto Maps { get; set; }
 
-        public ulong Population { get; set; }
+        public long Population { get; set; }
 
         public KeyValuePair<string, decimal> Gini{ get; set; }
 
