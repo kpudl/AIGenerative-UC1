@@ -10,8 +10,8 @@ namespace UseCase1_Tests
         [Test]
         public void CheckEndpointTest()
         {
-            var restCountriesController = new RestCountriesController(_testCountries, _service);
-            var result = (OkObjectResult)restCountriesController.Get();
+            var restCountriesController = new RestCountriesController(_service, _restService);
+            var result = (OkObjectResult)restCountriesController.Get().Result;
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, 200);
 
@@ -22,8 +22,8 @@ namespace UseCase1_Tests
         [Test]
         public void CheckEndpointTestWithFilters()
         {
-            var restCountriesController = new RestCountriesController(_testCountries, _service);
-            var result = (OkObjectResult)restCountriesController.Get(country:"SP");
+            var restCountriesController = new RestCountriesController(_service,_restService);
+            var result = (OkObjectResult)restCountriesController.Get(country:"SP").Result;
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, 200);
 

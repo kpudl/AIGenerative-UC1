@@ -12,15 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<ICountriesService<RestCountryDto>, CountriesService>();
-
-//If application would be bigger, I would put this injection into separate method/helper class
-var filePath = builder.Configuration.GetValue<string>("CountriesFilePath");
-if (File.Exists(filePath))
-{
-    var jsonRestCountries = File.ReadAllText(filePath);
-    var restCountries = JsonConvert.DeserializeObject<List<RestCountryDto>>(jsonRestCountries);
-    builder.Services.AddSingleton<IEnumerable<RestCountryDto>>(restCountries);
-}
+builder.Services.AddTransient<IRestCountriesService<RestCountryDto>, RestCountriesService>();
 
 var app = builder.Build();
 

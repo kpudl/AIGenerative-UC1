@@ -9,53 +9,53 @@ namespace UseCase1_Tests
         [Test]
         public void CheckFilterCountryName()
         {
-            var result = _service.FilterCountryName(_testCountries, "orr");
+            var result = _service.FilterCountryName(_testCountries, "orr").Result;
             Assert.AreEqual(result.Count(), 1);
 
-            result = _service.FilterCountryName(_testCountries, "sp");
+            result = _service.FilterCountryName(_testCountries, "sp").Result;
             Assert.AreEqual(result.Count(), 1);
 
-            result = _service.FilterCountryName(_testCountries, "co");
+            result = _service.FilterCountryName(_testCountries, "co").Result;
             Assert.AreEqual(result.Count(), 2);
 
-            result = _service.FilterCountryName(_testCountries, "xc");
+            result = _service.FilterCountryName(_testCountries, "xc").Result;
             Assert.AreEqual(result.Count(), 0);
 
-            Assert.Throws<NullReferenceException>(() => _service.FilterCountryName(_testCountries, null));
+            Assert.ThrowsAsync<NullReferenceException>(() => _service.FilterCountryName(_testCountries, null));
         }
 
         [Test]
         public void CheckFilterCountryWithPopulationLess()
         {
-            var result = _service.FilterCountryWithPopulationLess(_testCountries, 1);
+            var result = _service.FilterCountryWithPopulationLess(_testCountries, 1).Result;
             Assert.AreEqual(result.Count(), 0);
 
-            result = _service.FilterCountryWithPopulationLess(_testCountries, 20);
+            result = _service.FilterCountryWithPopulationLess(_testCountries, 20).Result;
             Assert.AreEqual(result.Count(), 3);
 
-            result = _service.FilterCountryWithPopulationLess(_testCountries, 19);
+            result = _service.FilterCountryWithPopulationLess(_testCountries, 19).Result;
             Assert.AreEqual(result.Count(), 2);
 
-            result = _service.FilterCountryWithPopulationLess(_testCountries, 50);
+            result = _service.FilterCountryWithPopulationLess(_testCountries, 50).Result;
             Assert.AreEqual(result.Count(), 4);
 
-            Assert.Throws<ArgumentException>(() => _service.FilterCountryWithPopulationLess(_testCountries, -10));
+            Assert.ThrowsAsync<ArgumentException>(() => _service.FilterCountryWithPopulationLess(_testCountries, -10));
         }
 
         [Test]
         public void CheckSortCountries()
         {
-            var result = _service.SortCountries(_testCountries, SortTypes.ascend);
+            var result = _service.SortCountries(_testCountries, SortTypes.ascend).Result;
             Assert.AreEqual(result.Count(), 4);
             Assert.AreEqual(result.First().Name.Common, "Andorra");
             Assert.AreEqual(result.Last().Name.Common, "Spain");
 
-            result = _service.SortCountries(_testCountries, 0);
+            result = _service.SortCountries(_testCountries, 0).Result;
             Assert.AreEqual(result.Count(), 4);
             Assert.AreEqual(result.First().Name.Common, "Andorra");
             Assert.AreEqual(result.Last().Name.Common, "Spain");
 
-            result = _service.SortCountries(_testCountries, SortTypes.descend);
+            result = _service.SortCountries(_testCountries, SortTypes.descend).Result;
             Assert.AreEqual(result.Count(), 4);
             Assert.AreEqual(result.First().Name.Common, "Spain");
             Assert.AreEqual(result.Last().Name.Common, "Andorra");
@@ -64,16 +64,16 @@ namespace UseCase1_Tests
         [Test]
         public void CheckSelectCountries()
         {
-            var result = _service.SelectCountries(_testCountries, 1);
+            var result = _service.SelectCountries(_testCountries, 1).Result;
             Assert.AreEqual(result.Count(), 1);
 
-            result = _service.SelectCountries(_testCountries, 4);
+            result = _service.SelectCountries(_testCountries, 4).Result;
             Assert.AreEqual(result.Count(), 4);
 
-            result = _service.SelectCountries(_testCountries, 200);
+            result = _service.SelectCountries(_testCountries, 200).Result;
             Assert.AreEqual(result.Count(), _testCountries.Count());
 
-            Assert.Throws<ArgumentException>(() => _service.SelectCountries(_testCountries, -10));
+            Assert.ThrowsAsync<ArgumentException>(() => _service.SelectCountries(_testCountries, -10));
         }
     }
 }

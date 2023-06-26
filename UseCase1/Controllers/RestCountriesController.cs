@@ -10,35 +10,50 @@ namespace UseCase1.Controllers
     [ApiController]
     public class RestCountriesController : ControllerBase
     {
-        private readonly IEnumerable<RestCountryDto> _countriesList;
         private readonly ICountriesService<RestCountryDto> _countriesService;
+        private readonly IRestCountriesService<RestCountryDto> _restCountriesService;
 
-        public RestCountriesController(IEnumerable<RestCountryDto> countriesList,
-            ICountriesService<RestCountryDto> countriesService)
+        public RestCountriesController(ICountriesService<RestCountryDto> countriesService,
+            IRestCountriesService<RestCountryDto> restCountriesService)
         {
-            _countriesList = countriesList;
             _countriesService = countriesService;
+            _restCountriesService = restCountriesService;
         }
 
         [HttpGet]
-        public ActionResult Get(string? country=null, int? population=null, SortTypes? sortBy=null, int? records=null) 
+        public async Task<ActionResult> Get(string? country=null, int? population=null, SortTypes? sortBy=null, int? records=null) 
         {
-            var listOfCountries = _countriesList;
+            try
+            {
+                var listOfCountries = await _restCountriesService.GetCountries();
 
-            if (!string.IsNullOrEmpty(country))
-                listOfCountries = _countriesService.FilterCountryName(listOfCountries, country);
-            if (population != null)
-                listOfCountries = _countriesService.FilterCountryWithPopulationLess(listOfCountries, population.Value);
-            if (sortBy != null)
-                listOfCountries = _countriesService.SortCountries(listOfCountries, sortBy.Value);
-            if (records != null)
-                listOfCountries = _countriesService.SelectCountries(listOfCountries, records.Value);
+                if (!string.IsNullOrEmpty(country))
+                    listOfCountries = await _countriesService.FilterCountryName(listOfCountries, country);
+                if (population != null)
+                    listOfCountries = await _countriesService.FilterCountryWithPopulationLess(listOfCountries, population.Value);
+                if (sortBy != null)
+                    listOfCountries = await _countriesService.SortCountries(listOfCountries, sortBy.Value);
+                if (records != null)
+                    listOfCountries = await _countriesService.SelectCountries(listOfCountries, records.Value);
 
-            return Ok(JsonConvert.SerializeObject(listOfCountries, Formatting.Indented,
-                            new JsonSerializerSettings
-                            {
-                                NullValueHandling = NullValueHandling.Ignore
-                            }));
+                return Ok(JsonConvert.SerializeObject(listOfCountries, Formatting.Indented,
+                                new JsonSerializerSettings
+                                {
+                                    NullValueHandling = NullValueHandling.Ignore
+                                }));
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest($"Null reference exception catched: {ex.Message}");
+            }
+            catch (ArgumentException ex)
+            { 
+                return BadRequest($"Bad argument exception catched: {ex.Message}");
+            }
+            catch(HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

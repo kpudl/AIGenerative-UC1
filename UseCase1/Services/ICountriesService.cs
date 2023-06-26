@@ -1,15 +1,16 @@
-﻿using UseCase1.Models.RestCountry;
+﻿using UseCase1.Models;
+using UseCase1.Models.RestCountry;
 
 namespace UseCase1.Services
 {
     public interface ICountriesService<T>
     {
-        IEnumerable<T> FilterCountryWithPopulationLess(IEnumerable<T> inputList, int populationInMil);
+        Task<IEnumerable<T>> FilterCountryWithPopulationLess(IEnumerable<T> inputList, int populationInMil);
 
-        IEnumerable<T> FilterCountryName(IEnumerable<T> inputList, string countryName);
+        Task<IEnumerable<T>> FilterCountryName(IEnumerable<T> inputList, string countryName);
 
-        IEnumerable<T> SortCountries(IEnumerable<T> inputList, SortTypes sortType);
+        Task<IEnumerable<T>> SortCountries(IEnumerable<T> inputList, SortTypes sortType);
 
-        IEnumerable<T> SelectCountries(IEnumerable<T> inputList, int numbersOfRecordsShown);
+        Task<IEnumerable<T>> SelectCountries(IEnumerable<T> inputList, int numbersOfRecordsShown);
     }
 }
